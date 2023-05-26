@@ -26,9 +26,16 @@ class DefaultController extends AbstractController
     public function images(PostRepository $posts): Response
     {
         $images = $posts->findAll();
-        // dd($posts->findAll());
 
         return $this->render('images.html.twig', ['images' => $images]);
+    }
+
+    #[Route('/delete', name: 'delete')]
+    public function delete(PostRepository $posts): Response
+    {
+        unlink($_SERVER['DOCUMENT_ROOT'].'/uploads/Amway-pay-64712fe4d34c1.pdf');
+
+        return $this->redirectToRoute('images');
     }
 
     // pdf
@@ -109,8 +116,7 @@ class DefaultController extends AbstractController
 
                 try {
                     $brochureFile->move(
-                        $this->getParameter('image_directory'),
-                        $newFilename
+                        $this->getParameter('image_directory'), $newFilename
                     );
                 } catch (FileException $e) {
 
